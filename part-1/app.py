@@ -1,21 +1,45 @@
 from flask import Flask, render_template, json, request
-from flask.ext.mysql import MySQL
+from flask_mysqldb import MySQL
 from werkzeug import generate_password_hash, check_password_hash
 
 mysql = MySQL()
 app = Flask(__name__)
 
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'mysql'
+app.config['MYSQL_DATABASE_USER'] = 'python-blog'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'PfGpAs5'
-app.config['MYSQL_DATABASE_DB'] = 'mysql-DB'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_DB'] = 'PFG-BLOG'
+app.config['MYSQL_DATABASE_HOST'] = 'mysql-db'
 mysql.init_app(app)
 
-
 @app.route('/')
-def main():
-    return render_template('index.html')
+def index():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM posts")
+    posts = cur.fetchall()
+    cur.close()
+    return render_template('index.html', posts=posts)
+
+@app.route('/post/<int:post_id>')
+def post(post_id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM posts WHERE id = %s", (post_id,))
+    post = cur.fetchone()
+    cur.close()
+    return render_template('post.html', post=post)
+
+@app.route('/new_post', methods=['GET', 'POST'])
+def new_post():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO posts (title, content, author_id) VALUES (%s, %s, %s)", (title, content, 1))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('index'))
+    else:
+        return render_template('new_post.html')
 
 
 @app.route('/signup')
