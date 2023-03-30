@@ -12,9 +12,11 @@ variables:
 
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '68e3f430-99ba-4203-837c-92ebab3ae898'
-  imageRepository: 'flaskblogmysql'
+  imageRepository-mysql: 'flask-blog-mysql'
+  imageRepository-python: 'flask-blog-python'
   containerRegistry: 'registryupmpfg.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath-mysql: 'MySQL-DB/Dockerfile'
+  dockerfilePath-python: 'part-1/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'registryupmpfg11388849-auth'
 
@@ -32,11 +34,21 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build and push an MySQL image to container registry
       inputs:
         command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        repository: $(imageRepository-mysql)
+        dockerfile: $(dockerfilePath-mysql)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build and push an Flask image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository-python)
+        dockerfile: $(dockerfilePath-python)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
@@ -50,7 +62,7 @@ stages:
 
   jobs:
   - deployment: Deploy
-    displayName: Deploy
+    displayName: Deploy 
     pool:
       vmImage: $(vmImageName)
     environment: 'gabrielenriquegonzalezlopezpythonflaskblogwithMySQL.python-blog'
@@ -66,14 +78,30 @@ stages:
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
           - task: KubernetesManifest@0
-            displayName: Deploy to Kubernetes cluster
+            displayName: Deploy MySQL to Kubernetes cluster
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
+                $(Pipeline.Workspace)/MySQL-DB/mysql-db-secret.yml
+                $(Pipeline.Workspace)/MySQL-DB/mysql-db-persistance.yml
+                $(Pipeline.Workspace)/MySQL-DB/mysql-db-deployment.yml
+                $(Pipeline.Workspace)/MySQL-DB/mysql-db-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
-                $(containerRegistry)/$(imageRepository):$(tag)
+                $(containerRegistry)/$(imageRepository-mysql):$(tag)
+          
+          - task: KubernetesManifest@0
+            displayName: Deploy MySQL to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/part-1/mysql-db-secret.yml
+                $(Pipeline.Workspace)/MySQL-DB/mysql-db-persistance.yml
+                $(Pipeline.Workspace)/MySQL-DB/mysql-db-deployment.yml
+                $(Pipeline.Workspace)/MySQL-DB/mysql-db-service.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository-python):$(tag)
 

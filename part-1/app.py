@@ -1,15 +1,17 @@
 from flask import Flask, render_template, json, request
 from flask_mysqldb import MySQL
 from werkzeug import generate_password_hash, check_password_hash
+import os
 
 mysql = MySQL()
 app = Flask(__name__)
 
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'python-blog'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'PfGpAs5'
-app.config['MYSQL_DATABASE_DB'] = 'PFG-BLOG'
-app.config['MYSQL_DATABASE_HOST'] = 'mysql-db'
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv("db_root_password")
+app.config['MYSQL_DATABASE_DB'] = os.getenv("db_name")
+app.config['MYSQL_DATABASE_HOST'] = os.getenv("MYSQL_SERVICE_HOST")
+app.config["MYSQL_DATABASE_PORT"] = int(os.getenv("MYSQL_SERVICE_PORT"))
 mysql.init_app(app)
 
 @app.route('/')

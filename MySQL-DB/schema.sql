@@ -1,4 +1,7 @@
-CREATE TABLE `PFG-BLOG`.`tbl_user` (
+CREATE DATABASE flask_blog;
+USE flask_blog;
+
+CREATE TABLE `flask_blog`.`tbl_user` (
   `user_id` BIGINT NULL AUTO_INCREMENT,
   `user_name` VARCHAR(45) NULL,
   `user_username` VARCHAR(45) NULL,
@@ -16,7 +19,7 @@ CREATE TABLE IF NOT EXISTS posts (
 );
 
 DELIMITER $$
-CREATE DEFINER=`python-blog`@`mysql-db` PROCEDURE `sp_createUser`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_createUser`(
     IN p_name VARCHAR(20),
     IN p_username VARCHAR(20),
     IN p_password VARCHAR(20)
