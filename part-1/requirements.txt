@@ -2,5 +2,5 @@ Flask==2.1.1
 Flask-MySQL==1.4.0  
 PyMySQL==1.0.2
 Werkzeug==2.1.2
-mysqlclient==2.1.1
+mysql-connector-python
 cryptography
