@@ -11,4 +11,4 @@ spec:
     name: flask-blog-mysql
   selector:
     app: db
-  type: LoadBalancer
+  type: ClusterIP

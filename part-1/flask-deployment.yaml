@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-blog
+  labels:
+    app: flaskapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flaskapi
+  template:
+    metadata:
+      labels:
+        app: flaskapi
+    spec:
+      containers:
+        - name: flaskapi
+          image: flask-api
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            - name: db_root_password
+              valueFrom:
+                secretKeyRef:
+                  name: flask-blog-mysql-secrets
+                  key: db_root_password
+            - name: db_name
+              value: flask_blog
+            - name: MYSQL_SERVICE_HOST
+              value: flask-blog-mysql
+            - name: MYSQL_SERVICE_PORT
+              value: 3306

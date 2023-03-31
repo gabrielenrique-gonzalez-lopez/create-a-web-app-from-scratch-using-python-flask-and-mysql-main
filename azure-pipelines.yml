@@ -92,14 +92,12 @@ stages:
                 $(containerRegistry)/$(imageRepository-mysql):$(tag)
           
           - task: KubernetesManifest@0
-            displayName: Deploy MySQL to Kubernetes cluster
+            displayName: Deploy Flask to Kubernetes cluster
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/part-1/mysql-db-secret.yml
-                $(Pipeline.Workspace)/MySQL-DB/mysql-db-persistance.yml
-                $(Pipeline.Workspace)/MySQL-DB/mysql-db-deployment.yml
-                $(Pipeline.Workspace)/MySQL-DB/mysql-db-service.yml
+                $(Pipeline.Workspace)/part-1/flask-deployment.yml
+                $(Pipeline.Workspace)/part-1/flask-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
