@@ -53,13 +53,9 @@ stages:
         tags: |
           $(tag)
 
-    #- publish: manifests
-    #  artifact: manifests
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(Pipeline.Workspace)'
-        artifact: 'manifests'
-        publishLocation: 'pipeline'
+    - publish: manifests
+      artifact: manifests
+
     
 
 
@@ -91,7 +87,7 @@ stages:
               namespace: 'python-blog'
               command: 'apply'
               useConfigurationFile: true
-              configuration: '$(Pipeline.Workspace)/manifests/mysql-db-secret.yml'
+              configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-secret.yml'
           
           - task: Kubernetes@1
             inputs:
@@ -100,7 +96,7 @@ stages:
               namespace: 'python-blog'
               command: 'apply'
               useConfigurationFile: true
-              configuration: '$(Pipeline.Workspace)/manifests/mysql-db-persistance.yml'
+              configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-persistance.yml'
 
           - task: KubernetesManifest@0
             displayName: Deploy MySQL to Kubernetes cluster
