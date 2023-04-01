@@ -103,8 +103,10 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Build.SourcesDirectory)/manifests/mysql-db-deployment.yml
-                $(Build.SourcesDirectory)/manifests/mysql-db-service.yml
+                $(Pipeline.Workspace)/manifests/mysql-db-secret.yml
+                $(Pipeline.Workspace)/manifests/mysql-db-persistance.yml
+                $(Pipeline.Workspace)/manifests/mysql-db-deployment.yml
+                $(Pipeline.Workspace)/manifests/mysql-db-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
@@ -115,8 +117,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Build.SourcesDirectory)/manifests/flask-deployment.yml
-                $(Build.SourcesDirectory)/manifests1/flask-service.yml
+                $(Pipeline.Workspace)/manifests/flask-deployment.yml
+                $(Pipeline.Workspace))/manifests1/flask-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
