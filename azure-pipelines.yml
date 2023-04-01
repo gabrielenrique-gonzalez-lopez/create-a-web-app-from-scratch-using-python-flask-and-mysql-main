@@ -3,7 +3,12 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- master
+  branches:
+   include:
+     - master
+  paths:
+    include:
+      - manifests
 
 resources:
 - repo: self
@@ -53,8 +58,8 @@ stages:
         tags: |
           $(tag)
 
-    - publish: manifests
-      artifact: manifests
+    #- publish: manifests
+    #  artifact: manifests
 
     
 
@@ -103,8 +108,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/mysql-db-deployment.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-service.yml
+                $(Build.SourcesDirectory)/manifests/mysql-db-deployment.yml
+                $(Build.SourcesDirectory)/manifests/mysql-db-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
@@ -115,8 +120,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/flask-deployment.yml
-                $(Pipeline.Workspace)/manifests1/flask-service.yml
+                $(Build.SourcesDirectory)/manifests/flask-deployment.yml
+                $(Build.SourcesDirectory)/manifests1/flask-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
