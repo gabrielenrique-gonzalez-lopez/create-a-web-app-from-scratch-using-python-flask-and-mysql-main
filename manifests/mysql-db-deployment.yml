@@ -17,7 +17,7 @@ spec:
       containers:
       - name: flask-blog-mysql
         image: registryupmpfg.azurecr.io/flask-blog-mysql
-        imagePullPolicy: Never
+        #imagePullPolicy: Never
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
