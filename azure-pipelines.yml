@@ -105,10 +105,10 @@ stages:
               kubernetesServiceConnection: 'AKS-UPM-PFG-Production-python-blog'
               namespace: 'python-blog'
               manifests: |
-                $(Pipeline.Workspace)/manifests/mysql-db-secret.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-persistance.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-deployment.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-service.yml
+                $(Pipeline.Workspace)/manifests/mysql-db-secret.yaml
+                $(Pipeline.Workspace)/manifests/mysql-db-persistance.yaml
+                $(Pipeline.Workspace)/manifests/mysql-db-deployment.yaml
+                $(Pipeline.Workspace)/manifests/mysql-db-service.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
@@ -121,8 +121,8 @@ stages:
               kubernetesServiceConnection: 'AKS-UPM-PFG-Production-python-blog'
               namespace: 'python-blog'
               manifests: |
-                $(Pipeline.Workspace)/manifests-2/flask-deployment.yml
-                $(Pipeline.Workspace)/manifests-2/flask-service.yml
+                $(Pipeline.Workspace)/manifests-2/flask-deployment.yaml
+                $(Pipeline.Workspace)/manifests-2/flask-service.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
