@@ -3,12 +3,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-  branches:
-   include:
-     - master
-  paths:
-    include:
-      - manifests
+- master
 
 resources:
 - repo: self
@@ -58,8 +53,8 @@ stages:
         tags: |
           $(tag)
 
-    #- publish: manifests
-    #  artifact: manifests
+    - publish: manifests
+      artifact: manifests
 
     
 
@@ -85,23 +80,23 @@ stages:
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
           
-          - task: Kubernetes@1
-            inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceEndpoint: 'AKS-UPM-PFG-Production-python-blog'
-              namespace: 'python-blog'
-              command: 'apply'
-              useConfigurationFile: true
-              configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-secret.yml'
+          #- task: Kubernetes@1
+          #  inputs:
+          #    connectionType: 'Kubernetes Service Connection'
+          #    kubernetesServiceEndpoint: 'AKS-UPM-PFG-Production-python-blog'
+          #    namespace: 'python-blog'
+          #    command: 'apply'
+          #    useConfigurationFile: true
+          #    configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-secret.yml'
           
-          - task: Kubernetes@1
-            inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceEndpoint: 'AKS-UPM-PFG-Production-python-blog'
-              namespace: 'python-blog'
-              command: 'apply'
-              useConfigurationFile: true
-              configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-persistance.yml'
+          #- task: Kubernetes@1
+          #  inputs:
+          #    connectionType: 'Kubernetes Service Connection'
+          #    kubernetesServiceEndpoint: 'AKS-UPM-PFG-Production-python-blog'
+          #    namespace: 'python-blog'
+          #    command: 'apply'
+          #    useConfigurationFile: true
+          #    configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-persistance.yml'
 
           - task: KubernetesManifest@0
             displayName: Deploy MySQL to Kubernetes cluster
