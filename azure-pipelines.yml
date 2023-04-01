@@ -121,8 +121,8 @@ stages:
               kubernetesServiceConnection: 'AKS-UPM-PFG-Production-python-blog'
               namespace: 'python-blog'
               manifests: |
-                $(Pipeline.Workspace)/manifests-2/flask-deployment.yaml
-                $(Pipeline.Workspace)/manifests-2/flask-service.yaml
+                $(Pipeline.Workspace)/manifests/flask-deployment.yaml
+                $(Pipeline.Workspace)/manifests/flask-service.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
