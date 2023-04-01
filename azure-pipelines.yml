@@ -54,7 +54,7 @@ stages:
           $(tag)
 
     - publish: manifests
-      artifact: manifests
+      artifact: manifests-2
 
     
 
@@ -68,7 +68,7 @@ stages:
     displayName: Deploy 
     pool:
       vmImage: $(vmImageName)
-    environment: 'gabrielenriquegonzalezlopezpythonflaskblogwithMySQL.python-blog'
+    environment: 'python-flask-blog-with-MySQL.python-blog'
     strategy:
       runOnce:
         deploy:
@@ -103,10 +103,10 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/mysql-db-secret.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-persistance.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-deployment.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-service.yml
+                $(Pipeline.Workspace)/manifests-2/mysql-db-secret.yml
+                $(Pipeline.Workspace)/manifests-2/mysql-db-persistance.yml
+                $(Pipeline.Workspace)/manifests-2/mysql-db-deployment.yml
+                $(Pipeline.Workspace)/manifests-2/mysql-db-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
@@ -117,8 +117,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/flask-deployment.yml
-                $(Pipeline.Workspace)/manifests/flask-service.yml
+                $(Pipeline.Workspace)/manifests-2/flask-deployment.yml
+                $(Pipeline.Workspace)/manifests-2/flask-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
