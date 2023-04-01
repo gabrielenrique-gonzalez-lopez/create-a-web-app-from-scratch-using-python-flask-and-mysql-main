@@ -56,6 +56,9 @@ stages:
     - publish: manifests
       artifact: manifests
 
+    
+
+
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
@@ -76,16 +79,32 @@ stages:
               action: createSecret
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+          
+          #- task: Kubernetes@1
+          #  inputs:
+          #    connectionType: 'Kubernetes Service Connection'
+          #    kubernetesServiceEndpoint: 'AKS-UPM-PFG-Production-python-blog'
+          #    namespace: 'python-blog'
+          #    command: 'apply'
+          #    useConfigurationFile: true
+          #    configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-secret.yml'
+          
+          #- task: Kubernetes@1
+          #  inputs:
+          #    connectionType: 'Kubernetes Service Connection'
+          #    kubernetesServiceEndpoint: 'AKS-UPM-PFG-Production-python-blog'
+          #    namespace: 'python-blog'
+          #    command: 'apply'
+          #    useConfigurationFile: true
+          #    configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-persistance.yml'
 
           - task: KubernetesManifest@0
             displayName: Deploy MySQL to Kubernetes cluster
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/mysql-db-secret.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-persistance.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-deployment.yml
-                $(Pipeline.Workspace)/manifests/mysql-db-service.yml
+                $(Build.SourcesDirectory)/manifests/mysql-db-deployment.yml
+                $(Build.SourcesDirectory)/manifests/mysql-db-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
@@ -96,8 +115,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/flask-deployment.yml
-                $(Pipeline.Workspace)/manifests1/flask-service.yml
+                $(Build.SourcesDirectory)/manifests/flask-deployment.yml
+                $(Build.SourcesDirectory)/manifests1/flask-service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
