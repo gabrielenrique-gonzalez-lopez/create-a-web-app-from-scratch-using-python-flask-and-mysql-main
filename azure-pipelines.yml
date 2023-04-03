@@ -80,24 +80,6 @@ stages:
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
           
-          #- task: Kubernetes@1
-          #  inputs:
-          #    connectionType: 'Kubernetes Service Connection'
-          #    kubernetesServiceEndpoint: 'AKS-UPM-PFG-Production-python-blog'
-          #    namespace: 'python-blog'
-          #    command: 'apply'
-          #    useConfigurationFile: true
-          #    configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-secret.yml'
-          
-          #- task: Kubernetes@1
-          #  inputs:
-          #    connectionType: 'Kubernetes Service Connection'
-          #    kubernetesServiceEndpoint: 'AKS-UPM-PFG-Production-python-blog'
-          #    namespace: 'python-blog'
-          #    command: 'apply'
-          #    useConfigurationFile: true
-          #    configuration: '$(Build.SourcesDirectory)/manifests/mysql-db-persistance.yml'
-          
           - task: KubernetesManifest@0
             displayName: Deploy MySQL to Kubernetes cluster
             inputs:
@@ -121,38 +103,12 @@ stages:
               kubernetesServiceConnection: 'AKS-UPM-PFG-Production-python-blog'
               namespace: 'python-blog'
               manifests: |
+                $(Pipeline.Workspace)/manifests/flask-ingress.yaml
                 $(Pipeline.Workspace)/manifests/flask-deployment.yaml
                 $(Pipeline.Workspace)/manifests/flask-service.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository-python):$(tag)
-
-          #- task: KubernetesManifest@0
-          #  displayName: Deploy MySQL to Kubernetes cluster
-          #  inputs:
-          #    action: deploy
-          #    manifests: |
-          #      $(Pipeline.Workspace)/manifests-2/mysql-db-secret.yml
-          #      $(Pipeline.Workspace)/manifests-2/mysql-db-persistance.yml
-          #      $(Pipeline.Workspace)/manifests-2/mysql-db-deployment.yml
-          #      $(Pipeline.Workspace)/manifests-2/mysql-db-service.yml
-          #    imagePullSecrets: |
-          #      $(imagePullSecret)
-          #    containers: |
-          #      $(containerRegistry)/$(imageRepository-mysql):$(tag)
-          
-          #- task: KubernetesManifest@0
-          #  displayName: Deploy Flask to Kubernetes cluster
-          #  inputs:
-          #    action: deploy
-          #    manifests: |
-          #      $(Pipeline.Workspace)/manifests-2/flask-deployment.yml
-          #      $(Pipeline.Workspace)/manifests-2/flask-service.yml
-          #    imagePullSecrets: |
-          #      $(imagePullSecret)
-          #    containers: |
-          #      $(containerRegistry)/$(imageRepository-python):$(tag)
-
 
 

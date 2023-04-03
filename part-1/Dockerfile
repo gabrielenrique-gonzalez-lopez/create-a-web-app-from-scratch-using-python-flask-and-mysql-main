@@ -17,7 +17,7 @@ COPY . /app
 ENV FLASK_APP=app.py
 
 # Expose port 5000 for the Flask app
-EXPOSE 5000
+EXPOSE 8080
 
 # Run the command to start the Flask app
 CMD [ "flask", "run"]
