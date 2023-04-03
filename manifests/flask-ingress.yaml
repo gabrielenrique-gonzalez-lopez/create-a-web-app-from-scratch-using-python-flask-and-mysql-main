@@ -5,15 +5,16 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
   - http:
       paths:
-      - path: /(.*)
+      - path: /flask-app
         pathType: Prefix
         backend:
           service:
             name: flask-service
             port:
-              number: 80
+              name: http
