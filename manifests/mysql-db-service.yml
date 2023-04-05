@@ -9,6 +9,7 @@ spec:
   - port: 3306
     protocol: TCP
     name: flask-blog-mysql
+    targetPort: 3306
   selector:
     app: db
   type: ClusterIP

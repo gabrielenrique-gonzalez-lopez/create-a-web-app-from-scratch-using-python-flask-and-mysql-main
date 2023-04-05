@@ -16,7 +16,7 @@ mysql.init_app(app)
 
 @app.route('/')
 def index():
-    cur = mysql.connection.cursor()
+    cur = mysql.connect.cursor()
     cur.execute("SELECT * FROM posts")
     posts = cur.fetchall()
     cur.close()
@@ -24,7 +24,7 @@ def index():
 
 @app.route('/post/<int:post_id>')
 def post(post_id):
-    cur = mysql.connection.cursor()
+    cur = mysql.connect.cursor()
     cur.execute("SELECT * FROM posts WHERE id = %s", (post_id,))
     post = cur.fetchone()
     cur.close()
@@ -35,9 +35,9 @@ def new_post():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        cur = mysql.connection.cursor()
+        cur = mysql.connect.cursor()
         cur.execute("INSERT INTO posts (title, content, author_id) VALUES (%s, %s, %s)", (title, content, 1))
-        mysql.connection.commit()
+        mysql.connect.commit()
         cur.close()
         return redirect(url_for('index'))
     else:
