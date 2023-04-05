@@ -19,7 +19,7 @@ spec:
           image: registryupmpfg.azurecr.io/flask-blog-python
           #imagePullPolicy: Never
           ports:
-            - containerPort: 8080
+            - containerPort: 5000
           env:
           - name: db_root_password
             valueFrom:
