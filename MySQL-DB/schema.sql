@@ -9,14 +9,13 @@ CREATE TABLE `flask_blog`.`tbl_user` (
   PRIMARY KEY (`user_id`)
 );
 
-CREATE TABLE IF NOT EXISTS posts (
+CREATE TABLE `flask_blog`. posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     author_id INT NOT NULL,
-    FOREIGN KEY (author_id) REFERENCES users(id)
-);
+    FOREIGN KEY (author_id) REFERENCES `flask_blog`.`tbl_user`(user_id)
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_createUser`(
