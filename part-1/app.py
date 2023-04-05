@@ -16,32 +16,56 @@ mysql.init_app(app)
 
 @app.route('/')
 def index():
-    cur = mysql.connect.cursor()
-    cur.execute("SELECT * FROM posts")
-    posts = cur.fetchall()
-    cur.close()
-    return render_template('index.html', posts=posts)
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM posts")
+        posts = cursor.fetchall()
+        cursor.close()
+        return render_template('index.html', posts=posts)
+    
+    except Exception as e:
+        return json.dumps({'error': str(e)})
+    finally:
+        cursor.close()
+        conn.close()
 
 @app.route('/post/<int:post_id>')
 def post(post_id):
-    cur = mysql.connect.cursor()
-    cur.execute("SELECT * FROM posts WHERE id = %s", (post_id,))
-    post = cur.fetchone()
-    cur.close()
-    return render_template('post.html', post=post)
+    try:
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM posts WHERE id = %s", (post_id,))
+        post = cursor.fetchone()
+        cursor.close()
+        return render_template('post.html', post=post)
+    
+    except Exception as e:
+        return json.dumps({'error': str(e)})
+    finally:
+        cursor.close()
+        conn.close()
 
 @app.route('/new_post', methods=['GET', 'POST'])
 def new_post():
-    if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
-        cur = mysql.connect.cursor()
-        cur.execute("INSERT INTO posts (title, content, author_id) VALUES (%s, %s, %s)", (title, content, 1))
-        mysql.connect.commit()
-        cur.close()
-        return redirect(url_for('index'))
-    else:
-        return render_template('new_post.html')
+    try:
+        if request.method == 'POST':
+            title = request.form['title']
+            content = request.form['content']
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO posts (title, content, author_id) VALUES (%s, %s, %s)", (title, content, 1))
+            conn.connect()
+            cursor.close()
+            return redirect(url_for('index'))
+        else:
+            return render_template('new_post.html')
+    except Exception as e:
+        return json.dumps({'error': str(e)})
+    finally:
+        cursor.close()
+        conn.close()
 
 
 @app.route('/signup')
