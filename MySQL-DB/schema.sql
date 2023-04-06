@@ -9,7 +9,7 @@ CREATE TABLE `flask_blog`.`tbl_user` (
   PRIMARY KEY (`user_id`)
 );
 
-CREATE TABLE `flask_blog`. `posts` (
+CREATE TABLE `flask_blog`.`posts` (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
