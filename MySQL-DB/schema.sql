@@ -1,20 +1,22 @@
 CREATE DATABASE flask_blog;
 
-CREATE TABLE flask_blog.tbl_user (
-  `user_id` BIGINT NULL AUTO_INCREMENT,
-  `user_name` VARCHAR(45) NULL,
-  `user_username` VARCHAR(45) NULL,
-  `user_password` VARCHAR(45) NULL,
-  PRIMARY KEY (`user_id`)
+USE flask_blog;
+
+CREATE TABLE tbl_user (
+  user_id BIGINT NULL AUTO_INCREMENT,
+  user_name VARCHAR(45) NULL,
+  user_username VARCHAR(45) NULL,
+  user_password VARCHAR(45) NULL,
+  PRIMARY KEY (user_id)
 );
 
-CREATE TABLE flask_blog.posts (
+CREATE TABLE posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     author_id INT NOT NULL,
-    FOREIGN KEY (author_id) REFERENCES flask_blog.tbl_user(user_id)
+    FOREIGN KEY (author_id) REFERENCES tbl_user(user_id)
 );
 
 DELIMITER $$
