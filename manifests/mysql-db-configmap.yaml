@@ -4,6 +4,8 @@ metadata:
   name: mysql-config
 data:
   init.sql: |-
+    CREATE DATABASE flask_blog;
+    
     USE flask_blog;
 
     CREATE TABLE tbl_user (
