@@ -10,6 +10,10 @@ CREATE TABLE tbl_user (
   PRIMARY KEY (user_id)
 );
 
+INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Alex', 'user_alex', '1234');
+INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Manuel', 'user_alex', '5678');
+INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Pedro', 'user_alex', '8910');
+
 CREATE TABLE posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -18,6 +22,10 @@ CREATE TABLE posts (
     author_id INT NOT NULL,
     FOREIGN KEY (author_id) REFERENCES tbl_user(user_id)
 );
+
+INSERT INTO posts (title, content) VALUES ( 'Post de Comida', 'Comidas ricas');
+INSERT INTO posts (title, content) VALUES ( 'Post de Ropa', 'Ropa a la moda');
+INSERT INTO posts (title, content) VALUES ( 'Post de Coches', 'Coches lentos');
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_createUser`(
