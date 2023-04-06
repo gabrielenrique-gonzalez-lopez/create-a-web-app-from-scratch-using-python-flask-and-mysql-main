@@ -1,5 +1,4 @@
 CREATE DATABASE flask_blog;
-USE flask_blog;
 
 CREATE TABLE flask_blog.tbl_user (
   `user_id` BIGINT NULL AUTO_INCREMENT,
