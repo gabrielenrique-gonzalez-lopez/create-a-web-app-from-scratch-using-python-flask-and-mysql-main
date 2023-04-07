@@ -6,6 +6,7 @@ metadata:
     app: db
 spec:
   replicas: 1
+  serviceName: flask-blog-mysql
   selector:
     matchLabels:
       app: db
