@@ -9,6 +9,10 @@ spec:
   selector:
     matchLabels:
       app: db
+  template:
+    metadata:
+      labels:
+        app: db
     spec:
       containers:
       - name: flask-blog-mysql
