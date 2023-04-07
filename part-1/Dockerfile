@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:33.10.10-buster
+FROM python:3.10.11-buster
 
 # Set the working directory to /app
 WORKDIR /app
