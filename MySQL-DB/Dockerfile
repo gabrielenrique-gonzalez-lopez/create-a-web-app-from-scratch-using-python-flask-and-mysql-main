@@ -1,4 +1,4 @@
-FROM mysql:8.0.32
+FROM mysql:5.7
 
 #ENV MYSQL_DATABASE flask_blog
 
