@@ -91,7 +91,6 @@ stages:
               namespace: 'python-blog'
               manifests: |
                 $(Pipeline.Workspace)/manifests/mysql-db-secret.yaml
-                $(Pipeline.Workspace)/manifests/mysql-db-configmap.yaml
                 $(Pipeline.Workspace)/manifests/mysql-db-persistance.yaml
                 $(Pipeline.Workspace)/manifests/mysql-db-deployment.yaml
                 $(Pipeline.Workspace)/manifests/mysql-db-service.yaml

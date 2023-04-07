@@ -9,10 +9,6 @@ spec:
   selector:
     matchLabels:
       app: db
-  template:
-    metadata:
-      labels:
-        app: db
     spec:
       containers:
       - name: flask-blog-mysql
@@ -30,12 +26,12 @@ spec:
         volumeMounts:
           - name: mysql-persistent-storage
             mountPath: /var/lib/mysql
-          - name: mysql-config
-            mountPath: /docker-entrypoint-initdb.d
+          # - name: mysql-config
+          #   mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: mysql-pv-claim
-        - name: mysql-config
-          configMap:
-            name: mysql-config
+        # - name: mysql-config
+        #   configMap:
+        #     name: mysql-config
