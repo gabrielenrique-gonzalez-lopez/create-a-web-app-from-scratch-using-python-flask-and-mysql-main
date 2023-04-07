@@ -24,8 +24,16 @@ spec:
             secretKeyRef:
               name: flask-blog-mysql-secrets
               key: db_root_password
-        - name: MYSQL_ALLOW_EMPTY_PASSWORD
-          value: 'yes'
+        - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: username
+                name: flask-blog-mysql-flask-auth
+        - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: flask-blog-mysql-flask-auth
         ports:
         - containerPort: 3306
           name: db-container

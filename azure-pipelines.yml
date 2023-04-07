@@ -116,6 +116,7 @@ stages:
               manifests: |
                 $(Pipeline.Workspace)/manifests/flask-deployment.yaml
                 $(Pipeline.Workspace)/manifests/flask-service.yaml
+                $(Pipeline.Workspace)/manifests/flask-secret.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |

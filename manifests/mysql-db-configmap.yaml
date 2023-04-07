@@ -11,26 +11,27 @@ data:
     USE flask_blog;
 
     DROP TABLE IF EXISTS tbl_user;
-    DROP TABLE IF EXISTS post;
+    DROP TABLE IF EXISTS posts;
 
     CREATE TABLE tbl_user (
-      user_id BIGINT NULL AUTO_INCREMENT,
-      user_name VARCHAR(45) NULL,
-      user_username VARCHAR(45) NULL,
-      user_password VARCHAR(45) NULL,
-      PRIMARY KEY (user_id)
-      UNIQUE (user_username)
+    user_id BIGINT NULL AUTO_INCREMENT,
+    user_name VARCHAR(45) NULL,
+    user_username VARCHAR(45) NULL,
+    user_password VARCHAR(45) NULL,
+    PRIMARY KEY (user_id),
+    UNIQUE (user_username)
     );
 
     CREATE TABLE posts (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        author_id INT NOT NULL,
-        FOREIGN KEY (author_id) REFERENCES tbl_user(user_id)
+    id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    author_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (author_id) REFERENCES tbl_user(user_id)
     );
 
-    GRANT SELECT, INSERT ON flask_blog.* TO 'root'@'%';
+    GRANT SELECT, INSERT ON flask_blog.* TO 'flask'@'%';
 
     FLUSH PRIVILEGES;
