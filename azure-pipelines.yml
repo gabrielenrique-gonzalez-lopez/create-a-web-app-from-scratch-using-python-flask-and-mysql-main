@@ -98,8 +98,9 @@ stages:
               namespace: '$(k8sNamespace)'
               manifests: |
                 $(Pipeline.Workspace)/manifests/mysql-db-secret.yaml
+                $(Pipeline.Workspace)/manifests/mysql-db-configmap.yaml
                 $(Pipeline.Workspace)/manifests/mysql-db-persistance.yaml
-                $(Pipeline.Workspace)/manifests/mysql-db-deployment.yaml
+                $(Pipeline.Workspace)/manifests/mysql-db-statefulset.yaml
                 $(Pipeline.Workspace)/manifests/mysql-db-service.yaml
               imagePullSecrets: |
                 $(imagePullSecret)

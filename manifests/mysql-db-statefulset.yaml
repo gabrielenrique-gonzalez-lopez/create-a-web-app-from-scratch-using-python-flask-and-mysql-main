@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: mysql
   labels:
@@ -17,7 +17,6 @@ spec:
       containers:
       - name: flask-blog-mysql
         image: registryupmpfg.azurecr.io/flask-blog-mysql
-        #imagePullPolicy: Never
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
@@ -26,24 +25,18 @@ spec:
               key: db_root_password
         - name: MYSQL_ALLOW_EMPTY_PASSWORD
           value: 'yes'
-        # command: ["/entrypoint.sh", "--ignore-db-dir"]
-        # args: ["mysqld"]
         ports:
         - containerPort: 3306
           name: db-container
         volumeMounts:
           - name: mysql-persistent-storage
             mountPath: /var/lib/mysql
-          # - name: mysql-emptydir
-          #   mountPath: /var/lib/mysql-empty
-          # - name: mysql-config
-          #   mountPath: /docker-entrypoint-initdb.d
+          - name: mysql-config
+            mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: mysql-pv-claim
-        # - name: mysql-emptydir
-        #   emptyDir: {}
-        # - name: mysql-config
-        #   configMap:
-        #     name: mysql-config
+        - name: mysql-config
+          configMap:
+            name: mysql-config
