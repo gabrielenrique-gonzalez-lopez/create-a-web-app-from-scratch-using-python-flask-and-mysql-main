@@ -24,24 +24,26 @@ spec:
             secretKeyRef:
               name: flask-blog-mysql-secrets
               key: db_root_password
-        command: ["/entrypoint.sh", "--ignore-db-dir"]
-        args: ["mysqld"]
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: 'yes'
+        # command: ["/entrypoint.sh", "--ignore-db-dir"]
+        # args: ["mysqld"]
         ports:
         - containerPort: 3306
           name: db-container
         volumeMounts:
           - name: mysql-persistent-storage
             mountPath: /var/lib/mysql
-          - name: mysql-emptydir
-            mountPath: /var/lib/mysql-empty
+          # - name: mysql-emptydir
+          #   mountPath: /var/lib/mysql-empty
           # - name: mysql-config
           #   mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: mysql-pv-claim
-        - name: mysql-emptydir
-          emptyDir: {}
+        # - name: mysql-emptydir
+        #   emptyDir: {}
         # - name: mysql-config
         #   configMap:
         #     name: mysql-config
