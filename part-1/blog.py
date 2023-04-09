@@ -16,7 +16,7 @@ def index():
     cursor.execute("USE flask_blog")
     query = ("SELECT id, title, content, created_at, author_id, user_username"
         " FROM posts p JOIN tbl_user u ON p.author_id = u.user_id"
-        " ORDER BY created DESC")
+        " ORDER BY created_at DESC")
     cursor.execute(
         query
     )
