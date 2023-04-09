@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS flask_blog;
+DROP DATABASE IF EXISTS flask-blog;
 
-CREATE DATABASE flask_blog;
+CREATE DATABASE flask-blog;
 
-USE flask_blog;
+USE flask-blog;
 
 DROP TABLE IF EXISTS tbl_user;
 DROP TABLE IF EXISTS posts;

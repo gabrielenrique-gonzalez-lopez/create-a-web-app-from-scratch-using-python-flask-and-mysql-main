@@ -4,11 +4,11 @@ metadata:
   name: mysql-config
 data:
   init.sql: |-
-    DROP DATABASE IF EXISTS flask_blog;
+    DROP DATABASE IF EXISTS flask-blog;
 
-    CREATE DATABASE flask_blog;
+    CREATE DATABASE flask-blog;
     
-    USE flask_blog;
+    USE flask-blog;
 
     DROP TABLE IF EXISTS tbl_user;
     DROP TABLE IF EXISTS posts;
@@ -32,6 +32,6 @@ data:
     FOREIGN KEY (author_id) REFERENCES tbl_user(user_id)
     );
 
-    GRANT SELECT, INSERT ON flask_blog.* TO 'flask'@'%';
+    GRANT SELECT, INSERT ON flask-blog.* TO 'flask'@'%';
 
     FLUSH PRIVILEGES;

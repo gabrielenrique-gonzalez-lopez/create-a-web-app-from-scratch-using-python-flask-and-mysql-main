@@ -35,7 +35,7 @@ spec:
               key: password
               name: flask-blog-mysql-auth
         - name: 'MYSQL_DATABASE'
-          value: flask_blog
+          value: flask-blog
         ports:
         - containerPort: 3306
           name: db-container
