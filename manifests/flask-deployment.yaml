@@ -21,7 +21,7 @@ spec:
           ports:
             - containerPort: 5000
           env:
-          - name: MYSQL_ROOT_DATABASE_PASSWORD
+          - name: MYSQL_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: flask-blog-mysql-secrets
@@ -30,12 +30,12 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: username
-                name: flask-blog-mysql-flask-auth
+                name: flask-blog-mysql-auth
           - name: MYSQL_DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: password
-                name: flask-blog-mysql-flask-auth
+                name: flask-blog-mysql-auth
           - name: 'MYSQL_DATABASE_DB'
             value: flask_blog
           - name: MYSQL_DATABASE_HOST
