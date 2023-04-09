@@ -1,14 +1,14 @@
-DROP DATABASE IF EXISTS flask-blog;
+DROP DATABASE IF EXISTS flask_blog;
 
-CREATE DATABASE flask-blog;
+CREATE DATABASE flask_blog;
 
-USE flask-blog;
+USE flask_blog;
 
 DROP TABLE IF EXISTS tbl_user;
 DROP TABLE IF EXISTS posts;
 
 CREATE TABLE tbl_user (
-  user_id BIGINT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL AUTO_INCREMENT,
   user_name VARCHAR(45) NULL,
   user_username VARCHAR(45) NULL,
   user_password VARCHAR(45) NULL,
