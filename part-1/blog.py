@@ -2,7 +2,7 @@ from flask import (Blueprint, current_app, flash, g, redirect, render_template,
                    request, url_for)
 from werkzeug.exceptions import abort
 
-from db import get_db
+from .db import get_db
 
 bp = Blueprint("blog", __name__)
 
