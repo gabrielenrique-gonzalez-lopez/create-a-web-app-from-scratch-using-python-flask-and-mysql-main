@@ -15,6 +15,8 @@ COPY . /app
 
 ENV FLASK_RUN_HOST=0.0.0.0
 
+ENV FLASK_APP=flask-blog
+
 # Expose port 5000 for the Flask app
 EXPOSE 5000
 
