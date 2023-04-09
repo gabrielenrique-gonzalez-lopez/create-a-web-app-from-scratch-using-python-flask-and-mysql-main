@@ -16,7 +16,7 @@ variables:
   imageRepository-python: 'flask-blog-python'
   containerRegistry: 'registryupmpfg.azurecr.io'
   dockerfilePath-mysql: 'MySQL-DB/Dockerfile'
-  dockerfilePath-python: 'part-1/Dockerfile'
+  dockerfilePath-python: 'part-2/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'registryupmpfg11388849-auth'
   k8sNamespace: 'python-blog'

@@ -21,6 +21,10 @@ data:
     PRIMARY KEY (user_id),
     UNIQUE (user_username)
     );
+    
+    INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Alex', 'user_alex@email.com', '1234');
+    INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Manuel', 'user_manuel@email.com', '5678');
+    INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Pedro', 'user_pedro@email.com', '8910');
 
     CREATE TABLE posts (
     id INT NOT NULL AUTO_INCREMENT,

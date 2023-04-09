@@ -16,9 +16,9 @@ CREATE TABLE tbl_user (
   UNIQUE (user_username)
 );
 
--- INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Alex', 'user_alex', '1234');
--- INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Manuel', 'user_alex', '5678');
--- INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Pedro', 'user_alex', '8910');
+-- INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Alex', 'user_alex@email.com', '1234');
+-- INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Manuel', 'user_manuel@email.com', '5678');
+-- INSERT INTO tbl_user (user_name, user_username, user_password) VALUES ('Pedro', 'user_pedro@email.com', '8910');
 
 CREATE TABLE posts (
     id INT NOT NULL AUTO_INCREMENT,
@@ -30,6 +30,6 @@ CREATE TABLE posts (
     FOREIGN KEY (author_id) REFERENCES tbl_user(user_id)
 );
 
--- INSERT INTO posts (title, content) VALUES ( 'Post de Comida', 'Comidas ricas');
--- INSERT INTO posts (title, content) VALUES ( 'Post de Ropa', 'Ropa a la moda');
--- INSERT INTO posts (title, content) VALUES ( 'Post de Coches', 'Coches lentos');
+-- INSERT INTO posts (title, content, author_id) VALUES ( 'Post de Comida', 'Comidas ricas', 1);
+-- INSERT INTO posts (title, content, author_id) VALUES ( 'Post de Ropa', 'Ropa a la moda', 2);
+-- INSERT INTO posts (title, content, author_id) VALUES ( 'Post de Coches', 'Coches lentos', 3);
