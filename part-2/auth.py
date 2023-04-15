@@ -33,7 +33,7 @@ def load_logged_in_user():
         g.user = None
     else:
         cursor = get_db().cursor(dictionary=True)
-        cursor.execute("SELECT * FROM tbl_user WHERE id = %s", (user_id,))
+        cursor.execute("SELECT * FROM tbl_user WHERE user_id = %s", (user_id,))
         g.user = (
             cursor.fetchone()
         )
