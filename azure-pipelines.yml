@@ -62,6 +62,38 @@ stages:
           $(containerRegistry)/$(imageRepository-mysql):latest
         pull: true
 
+    - task: AzureCLI@2
+      displayName: Clean up old images
+      inputs:
+        azureSubscription: 'Azure for Students(96f90eb2-51b8-45a7-8966-e361b1f51855)'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          # Get list of Mysql images
+          images=$(az acr repository show-manifests --name $(containerRegistry) --repository $(imageRepository-mysql) --query '[].digest' -o tsv)
+          
+          # Keep only last 10 images
+          keep=10
+          images=($(echo "${images[@]}" | tr ' ' '\n' | sort -r | head -$keep))
+          
+          # Delete old images
+          for image in ${images[@]}; do
+            az acr repository delete --name $(containerRegistry) --image $(imageRepository)@$image --yes
+          done
+
+          # Get list of Python images
+          images=$(az acr repository show-manifests --name $(containerRegistry) --repository $(imageRepository-python) --query '[].digest' -o tsv)
+          
+          # Keep only last 10 images
+          keep=10
+          images=($(echo "${images[@]}" | tr ' ' '\n' | sort -r | head -$keep))
+          
+          # Delete old images
+          for image in ${images[@]}; do
+            az acr repository delete --name $(containerRegistry) --image $(imageRepository)@$image --yes
+          done
+
+
     - publish: manifests
       artifact: manifests
 
