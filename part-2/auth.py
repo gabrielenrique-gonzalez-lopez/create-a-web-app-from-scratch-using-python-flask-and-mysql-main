@@ -92,7 +92,7 @@ def login():
         cursor = db.cursor(dictionary=True)
         error = None
         cursor.execute(
-            "SELECT * FROM tbl_user WHERE user_username = %s", (username)
+            "SELECT * FROM tbl_user WHERE user_username = %s", (username,)
         )
         user = cursor.fetchone()
 
