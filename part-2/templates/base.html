@@ -2,16 +2,9 @@
 <html lang="en">
 	<title>{% block title %}{% endblock %}</title>
 	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<head>
-		<nav class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-		<a
-			href="{{ url_for('index') }}"
-			class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
-		>
-			<span class="fs-4">Python Flask App</span>
-		</a>		
-		</nav>
-		<ul class="nav nav-pills">
+	<nav>
+		<hi><a href="{{ url_for('index') }}"><span>Python Flask App</span></a></hi>	
+		<ul>
 			{% if g.user %}
 				<li><span>{{ g.user['user_username'] }}</span>
 				<li><a href="{{ url_for('auth.logout') }}">Log Out</a>
@@ -20,28 +13,21 @@
 				<li><a href="{{ url_for('auth.login') }}">Log In</a>
 			{% endif %}
 		</ul>
-	</head>
+	</nav>
 
-	<body>  
-		<div class="container">       
-			<header class="header">
-				{% block header %}{% endblock %}
-			</header>
-            <nav>
-                <ul>
-                  <li><a href="{{ url_for('index') }}">Home</a></li>
-                </ul>
-            </nav>
+	<section class="content">      
+		<header>
+			{% block header %}{% endblock %}
+		</header>
+		
+		{% for message in get_flashed_messages() %}
+		<div class="flash">{{ message }}</div>
+		{% endfor %}
 
-			{% for message in get_flashed_messages() %}
-			<div class="flash">{{ message }}</div>
-		  	{% endfor %}
+		{% block content %}{% endblock %} 
 
-            {% block content %}{% endblock %} 
-
-			<footer class="footer">            
-				<p>&copy; UPM </p>        
-			</footer>    
-		</div>
-	</body>
+		<footer class="footer">            
+			<p>&copy; UPM </p>        
+		</footer>    
+	</section>
 </html>
