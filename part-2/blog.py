@@ -75,7 +75,7 @@ def create():
             db.commit()
             return redirect(url_for("blog.index"))
 
-    return render_template("blog/create.html")
+    return render_template("create.html")
 
 
 @bp.route("/<int:id>/update", methods=("GET", "POST"))
@@ -104,7 +104,7 @@ def update(id):
             db.commit()
             return redirect(url_for("blog.index"))
 
-    return render_template("blog/update.html", post=post)
+    return render_template("update.html", post=post)
 
 
 @bp.route("/<int:id>/delete", methods=("POST",))
