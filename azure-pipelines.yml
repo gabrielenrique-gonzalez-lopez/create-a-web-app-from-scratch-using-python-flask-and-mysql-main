@@ -70,33 +70,47 @@ stages:
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
-          # Get list of Mysql images
-          images=$(az acr repository manifest list-metadata --name $(containerRegistry) --repository $(imageRepository-mysql) --last $(numberOfContainersToKeep))
+          # Get list of manifests for the repository
+          manifests=$(az acr repository show-manifests --name $(containerRegistry) --repository $(imageRepository-mysql) --query "[].{digest: digest, createdTime: createdTime}" --orderby "createdTime desc" --output tsv)
 
-          # Loop through all images in repository
-          for image in $(az acr repository show-tags --name $(containerRegistry) --repository $(imageRepository-mysql) --orderby time_desc)
-          do
-            # Check if image is not in the list of images to keep
-            if [[ "$images" != *"$image"* ]]
-            then
-              # Delete image
-              az acr repository delete --name $(containerRegistry) --image $(imageRepository-mysql):$image --yes
-            fi
-          done
+          # Count the number of manifests
+          number_of_manifests=$(echo "$manifests" | wc -l)
 
-          # Get list of Mysql images
-          images=$(az acr repository manifest list-metadata --name $(containerRegistry) --repository $(imageRepository-python) --last $(numberOfContainersToKeep))
-          
-          # Loop through all images in repository
-          for image in $(az acr repository show-tags --name $(containerRegistry) --repository $(imageRepository-python) --orderby time_desc)
-          do
-            # Check if image is not in the list of images to keep
-            if [[ "$images" != *"$image"* ]]
-            then
-              # Delete image
-              az acr repository delete --name $(containerRegistry) --image $(imageRepository-python):$image --yes
-            fi
-          done
+          # If there are more manifests than we want to keep, delete the excess ones
+          if [ "$number_of_manifests" -gt $(numberOfContainersToKeep) ]; then
+            excess=$((number_of_manifests - $(numberOfContainersToKeep)))
+            echo "Deleting $excess excess manifests..."
+
+            # Get the list of manifests to delete
+            manifests_to_delete=$(echo "$manifests" | tail -n $excess | awk '{print $1}')
+
+            # Delete each manifest
+            for manifest in $manifests_to_delete; do
+              echo "Deleting manifest $manifest..."
+              az acr repository delete --name $(containerRegistry) --image $(imageRepository-mysql)@$manifest --yes
+            done
+          fi
+
+          # Get list of manifests for the repository
+          manifests=$(az acr repository show-manifests --name $(containerRegistry) --repository $(imageRepository-python) --query "[].{digest: digest, createdTime: createdTime}" --orderby "createdTime desc" --output tsv)
+
+          # Count the number of manifests
+          number_of_manifests=$(echo "$manifests" | wc -l)
+
+          # If there are more manifests than we want to keep, delete the excess ones
+          if [ "$number_of_manifests" -gt $(numberOfContainersToKeep) ]; then
+            excess=$((number_of_manifests - $(numberOfContainersToKeep)))
+            echo "Deleting $excess excess manifests..."
+
+            # Get the list of manifests to delete
+            manifests_to_delete=$(echo "$manifests" | tail -n $excess | awk '{print $1}')
+
+            # Delete each manifest
+            for manifest in $manifests_to_delete; do
+              echo "Deleting manifest $manifest..."
+              az acr repository delete --name $(containerRegistry) --image $(imageRepository-python)@$manifest --yes
+            done
+          fi
 
 
     - publish: manifests
