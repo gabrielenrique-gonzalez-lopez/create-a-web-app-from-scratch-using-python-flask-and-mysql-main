@@ -78,7 +78,7 @@ stages:
           
           # Delete old images
           for image in ${images[@]}; do
-            az acr repository delete --name $(containerRegistry) --image $(imageRepository)@$image --yes
+            az acr repository delete --name $(containerRegistry) --image $(imageRepository-mysql)@$image --yes
           done
 
           # Get list of Python images
@@ -90,7 +90,7 @@ stages:
           
           # Delete old images
           for image in ${images[@]}; do
-            az acr repository delete --name $(containerRegistry) --image $(imageRepository)@$image --yes
+            az acr repository delete --name $(containerRegistry) --image $(imageRepository-python)@$image --yes
           done
 
 
