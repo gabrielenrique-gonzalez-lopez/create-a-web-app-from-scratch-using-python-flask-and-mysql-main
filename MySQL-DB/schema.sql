@@ -9,9 +9,9 @@ DROP TABLE IF EXISTS posts;
 
 CREATE TABLE tbl_user (
   user_id INT NOT NULL AUTO_INCREMENT,
-  user_name VARCHAR(45) NULL,
-  user_username VARCHAR(45) NULL,
-  user_password VARCHAR(45) NULL,
+  user_name VARCHAR(255) NOT NULL,
+  user_username VARCHAR(255) NOT NULL,
+  user_password VARCHAR(255) NOT NULL,
   PRIMARY KEY (user_id),
   UNIQUE (user_username)
 );
