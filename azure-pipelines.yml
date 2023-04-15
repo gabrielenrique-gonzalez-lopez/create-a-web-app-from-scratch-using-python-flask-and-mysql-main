@@ -14,6 +14,7 @@ variables:
   dockerRegistryServiceConnection: '68e3f430-99ba-4203-837c-92ebab3ae898'
   imageRepository-mysql: 'flask-blog-mysql'
   imageRepository-python: 'flask-blog-python'
+  numberOfContainersToKeep: 10
   containerRegistry: 'registryupmpfg.azurecr.io'
   dockerfilePath-mysql: 'MySQL-DB/Dockerfile'
   dockerfilePath-python: 'part-2/Dockerfile'
@@ -70,27 +71,31 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           # Get list of Mysql images
-          images=$(az acr repository show-manifests --name $(containerRegistry) --repository $(imageRepository-mysql) --query '[].digest' -o tsv)
-          
-          # Keep only last 10 images
-          keep=10
-          images=($(echo "${images[@]}" | tr ' ' '\n' | sort -r | head -$keep))
-          
-          # Delete old images
-          for image in ${images[@]}; do
-            az acr repository delete --name $(containerRegistry) --image $(imageRepository-mysql)@$image --yes
+          images=$(az acr repository manifest list-metadata --name $(containerRegistry) --repository $(imageRepository-mysql) --last $(numberOfContainersToKeep))
+
+          # Loop through all images in repository
+          for image in $(az acr repository show-tags --name $(containerRegistry) --repository $(imageRepository-mysql) --orderby time_desc)
+          do
+            # Check if image is not in the list of images to keep
+            if [[ "$images" != *"$image"* ]]
+            then
+              # Delete image
+              az acr repository delete --name $(containerRegistry) --image $(imageRepository-mysql):$image --yes
+            fi
           done
 
-          # Get list of Python images
-          images=$(az acr repository show-manifests --name $(containerRegistry) --repository $(imageRepository-python) --query '[].digest' -o tsv)
+          # Get list of Mysql images
+          images=$(az acr repository manifest list-metadata --name $(containerRegistry) --repository $(imageRepository-python) --last $(numberOfContainersToKeep))
           
-          # Keep only last 10 images
-          keep=10
-          images=($(echo "${images[@]}" | tr ' ' '\n' | sort -r | head -$keep))
-          
-          # Delete old images
-          for image in ${images[@]}; do
-            az acr repository delete --name $(containerRegistry) --image $(imageRepository-python)@$image --yes
+          # Loop through all images in repository
+          for image in $(az acr repository show-tags --name $(containerRegistry) --repository $(imageRepository-python) --orderby time_desc)
+          do
+            # Check if image is not in the list of images to keep
+            if [[ "$images" != *"$image"* ]]
+            then
+              # Delete image
+              az acr repository delete --name $(containerRegistry) --image $(imageRepository-python):$image --yes
+            fi
           done
 
 
