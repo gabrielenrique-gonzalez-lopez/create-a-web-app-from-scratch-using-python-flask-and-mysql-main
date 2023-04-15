@@ -92,7 +92,7 @@ stages:
           fi
 
           # Get list of manifests for the repository
-          manifests=$(az acr repository show-manifests --name $(containerRegistry) --repository $(imageRepository-python) --query "[].{digest: digest, createdTime: createdTime}" --orderby "createdTime desc" --output tsv)
+          manifests=$(az acr repository show-manifests --name $(containerRegistry) --repository $(imageRepository-python) --query "[].{digest: digest, createdTime: createdTime}" --orderby "time_desc" --output tsv)
 
           # Count the number of manifests
           number_of_manifests=$(echo "$manifests" | wc -l)
