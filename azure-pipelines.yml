@@ -139,7 +139,7 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         repository: $(imageRepository-python)
         command: 'run'
-        arguments: '--name python-blog $(containerRegistry)/$(imageRepository-python):$(tag) pytest --junitxml=report.xml'
+        arguments: '--name python-blog $(containerRegistry)/$(imageRepository-python):$(tag) pytest --junitxml=report.xml app/test.py'
       env:
         FLASK_ENV: 'test'
     - task: Docker@2
