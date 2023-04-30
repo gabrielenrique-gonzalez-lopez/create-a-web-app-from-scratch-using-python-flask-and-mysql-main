@@ -131,42 +131,6 @@ stages:
         cliProjectKey: 'Python-Blog'
         cliProjectName: 'Python-Blog'
         cliSources: '.'
-        extraProperties: |
-          sonar.coverageReportPaths='**/coverage.xml'
-    - task: Docker@2
-      displayName: 'Run Tests in Docker Container'
-      inputs:
-        containerRegistry: $(dockerRegistryServiceConnection)
-        repository: $(imageRepository-python)
-        command: 'run'
-        arguments: '--name python-blog $(containerRegistry)/$(imageRepository-python):$(tag) pytest --junitxml=report.xml app/test.py'
-      env:
-        FLASK_ENV: 'test'
-    - task: Docker@2
-      displayName: 'Copy test results from container'
-      inputs:
-        containerRegistry: $(dockerRegistryServiceConnection)
-        repository: $(imageRepository)
-        command: 'cp'
-        arguments: 'python-blog:/flask-blog/report.xml $(Build.ArtifactStagingDirectory)'
-
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish test results'
-      inputs:
-        artifactName: 'test-results'
-        path: '$(Build.ArtifactStagingDirectory)/report.xml'
-
-    - task: PublishTestResults@2
-      displayName: Publish test results
-      inputs:
-        testResultsFormat: JUnit
-        testResultsFiles: '$(Build.ArtifactStagingDirectory)/report.xml'
-
-    - task: PublishCodeCoverageResults@1
-      displayName: Publish code coverage results
-      inputs:
-        codeCoverageTool: Cobertura
-        summaryFileLocation: '**/coverage.xml'
     
     - task: SonarQubeAnalyze@5
     - task: SonarQubePublish@5
