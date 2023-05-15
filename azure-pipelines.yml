@@ -15,6 +15,7 @@ variables:
   imageRepository-mysql: 'flask-blog-mysql'
   imageRepository-python: 'flask-blog-python'
   numberOfContainersToKeep: 10
+  secretNameFilter: 'flask-blog-mysql-secrets, flask-blog-mysql-auth-username, flask-blog-mysql-auth-password, flask-blog-secret-key'
   containerRegistry: 'registryupmpfg.azurecr.io'
   dockerfilePath-mysql: 'MySQL-DB/Dockerfile'
   dockerfilePath-python: 'part-2/Dockerfile'
@@ -153,13 +154,48 @@ stages:
       runOnce:
         deploy:
           steps:
+          - task: AzureKeyVault@2
+            inputs:
+              azureSubscription: 'Azure for Students(96f90eb2-51b8-45a7-8966-e361b1f51855)'
+              KeyVaultName: 'AzureKeyVault-Upm-PFG'
+              SecretsFilter: $(secretNameFilter)
+              RunAsPreJob: true
+          - task: KubernetesManifest@0
+            displayName: Create MySQL ROOT Password secret
+            inputs:
+              action: createSecret
+              secretName: 'flask-blog-mysql-secrets'
+              namespace: '$(k8sNamespace)'
+              secretType: generic
+              secretArguments: |
+                --from-literal=db_root_password=$(flask-blog-mysql-secrets)
+          - task: KubernetesManifest@0
+            displayName: Create MySQL credential secrets
+            inputs:
+              action: createSecret
+              secretName: 'flask-blog-mysql-auth'
+              namespace: '$(k8sNamespace)'
+              secretType: generic
+              secretArguments: |
+                --from-literal=username=$(flask-blog-mysql-auth-username)
+                --from-literal=password=$(flask-blog-mysql-auth-password)
+          - task: KubernetesManifest@0
+            displayName: Create flask app key secret
+            inputs:
+              action: createSecret
+              secretName: 'flask-blog-secret-key'
+              namespace: '$(k8sNamespace)'
+              secretType: generic
+              secretArguments: |
+                --from-literal=flask_app_secret_key=$(flask-blog-secret-key)
           - task: KubernetesManifest@0
             displayName: Create imagePullSecret
             inputs:
               action: createSecret
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-          
+#                $(Pipeline.Workspace)/manifests/mysql-db-secret.yaml
+#                $(Pipeline.Workspace)/manifests/flask-secret.yaml
           - task: KubernetesManifest@0
             displayName: Deploy MySQL to Kubernetes cluster
             inputs:
@@ -167,7 +203,6 @@ stages:
               kubernetesServiceConnection: 'AKS-UPM-PFG-Production-python-blog'
               namespace: '$(k8sNamespace)'
               manifests: |
-                $(Pipeline.Workspace)/manifests/mysql-db-secret.yaml
                 $(Pipeline.Workspace)/manifests/mysql-db-configmap.yaml
                 $(Pipeline.Workspace)/manifests/mysql-db-persistance.yaml
                 $(Pipeline.Workspace)/manifests/mysql-db-statefulset.yaml
@@ -186,7 +221,6 @@ stages:
               manifests: |
                 $(Pipeline.Workspace)/manifests/flask-deployment.yaml
                 $(Pipeline.Workspace)/manifests/flask-service.yaml
-                $(Pipeline.Workspace)/manifests/flask-secret.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
