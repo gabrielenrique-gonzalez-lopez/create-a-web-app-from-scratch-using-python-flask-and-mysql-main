@@ -169,7 +169,7 @@ stages:
               secretType: generic
               secretArguments: |
                 --from-literal=db_root_password=$(flask-blog-mysql-secrets)
-          - task: KubernetesManifest@0
+          - task: KubernetesManifest@1
             displayName: Create MySQL credential secrets
             inputs:
               action: createSecret
@@ -177,8 +177,7 @@ stages:
               namespace: '$(k8sNamespace)'
               secretType: generic
               secretArguments: |
-                --from-literal=username=$(flask-blog-mysql-auth-username)
-                --from-literal=password=$(flask-blog-mysql-auth-password)
+                --from-literal=username=$(flask-blog-mysql-auth-username) --from-literal=password=$(flask-blog-mysql-auth-password)
           - task: KubernetesManifest@0
             displayName: Create flask app key secret
             inputs:
