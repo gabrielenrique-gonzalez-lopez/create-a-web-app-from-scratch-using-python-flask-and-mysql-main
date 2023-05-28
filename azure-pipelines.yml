@@ -193,8 +193,7 @@ stages:
               action: createSecret
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-#                $(Pipeline.Workspace)/manifests/mysql-db-secret.yaml
-#                $(Pipeline.Workspace)/manifests/flask-secret.yaml
+
           - task: KubernetesManifest@0
             displayName: Deploy MySQL to Kubernetes cluster
             inputs:
@@ -220,6 +219,7 @@ stages:
               manifests: |
                 $(Pipeline.Workspace)/manifests/flask-deployment.yaml
                 $(Pipeline.Workspace)/manifests/flask-service.yaml
+                $(Pipeline.Workspace)/manifests/flask-ingress.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |

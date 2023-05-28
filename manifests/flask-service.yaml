@@ -6,9 +6,9 @@ metadata:
     app: flaskapi
 spec:
   ports:
-  - port: 80
+  - port: 8080
     name: http
     targetPort: 5000
   selector:
     app: flaskapi
-  type: LoadBalancer
+  type: ClusterIP
