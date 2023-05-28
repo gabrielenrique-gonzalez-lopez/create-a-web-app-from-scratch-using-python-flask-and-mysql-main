@@ -2,6 +2,7 @@ import pytest
 from flask import g, session
 from .db import get_db
 from werkzeug.security import generate_password_hash
+from . import create_app
 
 @pytest.fixture
 def app():
