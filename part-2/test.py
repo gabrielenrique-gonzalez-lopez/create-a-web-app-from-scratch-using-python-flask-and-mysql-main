@@ -1,5 +1,5 @@
 import pytest
-from flask import g, session
+from flask import g, session, url_parse
 from .db import get_db
 from .auth import login, login_required
 
@@ -20,17 +20,17 @@ def test_index(client, auth):
 def test_create(client, auth):
     # test that create page requires authentication
     response = client.get("/create")
-    assert response.headers["Location"] == "http://localhost:5000/auth/login"
+    assert url_parse(response.headers["Location"]).path == "/auth/login"
 
     # test creating a post
     auth.login()
     response = client.post("/create", data={"title": "created", "content": ""})
-    assert response.headers["Location"] == "http://localhost:5000/blog/create"
+    assert url_parse(response.headers["Location"]).path == "/blog/create"
 
     response = client.post(
         "/create", data={"title": "created", "content": "test content"}
     )
-    assert response.headers["Location"] == "http://localhost:5000/blog/index"
+    assert url_parse(response.headers["Location"]).path == "/blog/index"
     with client:
         response = client.get("/")
         assert b"created" in response.data
