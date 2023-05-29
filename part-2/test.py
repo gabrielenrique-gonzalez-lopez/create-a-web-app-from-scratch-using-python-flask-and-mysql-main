@@ -4,26 +4,26 @@ from .db import get_db
 from .auth import login, login_required
 
 
-def test_index(client):
+def test_index(client, auth):
     # test that index page requires authentication
     response = client.get("/")
     assert b"Log In" in response.data
 
     # test that posts show up on index page
-    login()
+    auth.login()
     response = client.get("/")
     assert b"Test Title" in response.data
     assert b"Test Content" in response.data
     assert b"Test User" in response.data
 
 
-def test_create(client):
+def test_create(client, auth):
     # test that create page requires authentication
     response = client.get("/create")
     assert response.headers["Location"] == "http://localhost:5000/auth/login"
 
     # test creating a post
-    login()
+    auth.login()
     response = client.post("/create", data={"title": "created", "content": ""})
     assert response.headers["Location"] == "http://localhost:5000/blog/create"
 
@@ -36,13 +36,13 @@ def test_create(client):
         assert b"created" in response.data
 
 
-def test_update(client):
+def test_update(client, auth):
     # test that update page requires authentication
     response = client.get("/3/update")
     assert response.headers["Location"] == "http://localhost:5000/auth/login"
 
     # test that non-authors cannot update a post
-    login()
+    auth.login()
     response = client.get("/2/update")
     assert b"Test Title" in response.data
     assert b"Test Content" in response.data
@@ -61,13 +61,13 @@ def test_update(client):
         assert b"updated" in response.data
 
 
-def test_delete(client):
+def test_delete(client, auth):
     # test that delete route requires authentication
     response = client.post("/3/delete")
     assert response.headers["Location"] == "http://localhost:5000/auth/login"
 
     # test that non-authors cannot delete a post
-    login()
+    auth.login()
     response = client.post("/2/delete")
     assert response.status_code == 403
 

@@ -46,11 +46,24 @@ def client(app):
 
 @pytest.fixture
 def auth(client):
-    # Log in as the test user
-    with client.session_transaction() as session:
-        session["user_id"] = 3  # Assumes test user has ID of 8
+    class AuthActions:
+        def __init__(self, client):
+            self._client = client
 
-    yield client
+        def login(self):
+            # Perform the login request
+            response = self._client.post(
+                "/auth/login",
+                data={"username": "testuser", "password": "testpassword"}
+            )
+            assert response.status_code == 200
+
+        def logout(self):
+            # Perform the logout request
+            response = self._client.get("/auth/logout")
+            assert response.status_code == 302
+
+    return AuthActions(client)
 
 
 @pytest.fixture
