@@ -31,12 +31,12 @@ def app():
 
     yield app
 
-    # Clean up test data
-    with app.app_context():
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute("DELETE FROM tbl_user WHERE user_username = 'testuser'")
-        db.commit()
+    # # Clean up test data
+    # with app.app_context():
+    #     db = get_db()
+    #     cursor = db.cursor()
+    #     cursor.execute("DELETE FROM tbl_user WHERE user_username = 'testuser'")
+    #     db.commit()
 
 
 @pytest.fixture
