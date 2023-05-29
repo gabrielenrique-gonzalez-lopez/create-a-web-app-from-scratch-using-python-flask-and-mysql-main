@@ -1,5 +1,5 @@
 import pytest
-from flask import g, session, url_parse
+from flask import g, session
 from .db import get_db
 from .auth import login, login_required
 
@@ -20,17 +20,17 @@ def test_index(client, auth):
 def test_create(client, auth):
     # test that create page requires authentication
     response = client.get("/create")
-    assert url_parse(response.headers["Location"]).path == "/auth/login"
+    assert response.headers["Location"] == "/auth/login"
 
     # test creating a post
     auth.login()
     response = client.post("/create", data={"title": "created", "content": ""})
-    assert url_parse(response.headers["Location"]).path == "/blog/create"
+    assert response.headers["Location"] == "/blog/create"
 
     response = client.post(
         "/create", data={"title": "created", "content": "test content"}
     )
-    assert url_parse(response.headers["Location"]).path == "/blog/index"
+    assert response.headers["Location"] == "/blog/index"
     with client:
         response = client.get("/")
         assert b"created" in response.data
@@ -39,7 +39,7 @@ def test_create(client, auth):
 def test_update(client, auth):
     # test that update page requires authentication
     response = client.get("/3/update")
-    assert response.headers["Location"] == "http://localhost:5000/auth/login"
+    assert response.headers["Location"] == "/auth/login"
 
     # test that non-authors cannot update a post
     auth.login()
@@ -50,12 +50,12 @@ def test_update(client, auth):
 
     # test that authors can update a post
     response = client.post("/3/update", data={"title": "updated", "content": ""})
-    assert response.headers["Location"] == "http://localhost:5000/blog/1/update"
+    assert response.headers["Location"] == "/blog/3/update"
 
     response = client.post(
         "/3/update", data={"title": "updated", "content": "test content"}
     )
-    assert response.headers["Location"] == "http://localhost:5000/blog/index"
+    assert response.headers["Location"] == "/blog/index"
     with client:
         response = client.get("/")
         assert b"updated" in response.data
@@ -64,7 +64,7 @@ def test_update(client, auth):
 def test_delete(client, auth):
     # test that delete route requires authentication
     response = client.post("/3/delete")
-    assert response.headers["Location"] == "http://localhost:5000/auth/login"
+    assert response.headers["Location"] == "/auth/login"
 
     # test that non-authors cannot delete a post
     auth.login()
@@ -73,7 +73,7 @@ def test_delete(client, auth):
 
     # test that authors can delete a post
     response = client.post("/3/delete")
-    assert response.headers["Location"] == "http://localhost:5000/blog/index"
+    assert response.headers["Location"] == "/blog/index"
     with client:
         response = client.get("/")
         assert b"Test Title" not in response.data
@@ -89,10 +89,9 @@ def test_delete(client, auth):
         ("/3/delete", 302),
     ),
 )
-@login_required
 def test_login_required(client, path, status_code):
     response = client.post(path)
-    assert response.headers["Location"] == "http://localhost:5000/auth/login"
+    assert response.headers["Location"] == "/auth/login"
 
     response = client.get(path)
     assert response.status_code == status_code
